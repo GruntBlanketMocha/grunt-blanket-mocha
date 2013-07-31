@@ -122,10 +122,6 @@ module.exports = function(grunt) {
       var name, fullTitle, slow, err;
       var evt = this.event.replace('mocha.', '');
 
-      if (evt === 'end') {
-        phantomjs.halt();
-      }
-
       // Expand test values (and façace the Mocha test object)
       if (test) {
         fullTitle = test.fullTitle;

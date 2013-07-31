@@ -148,7 +148,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-### 0.1.1
+### 0.1.2
 *Released 31 July 2013*
 
 * Initial release
