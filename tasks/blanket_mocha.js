@@ -1,4 +1,4 @@
-// grunt-blanket-qunit 0.2.0
+// grunt-blanket-mocha 0.1.3
 //
 // Copyright (C) 2013 Dave Cadwallader, Model N, Inc.
 // Distributed under the MIT License

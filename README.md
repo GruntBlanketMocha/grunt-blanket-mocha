@@ -48,7 +48,10 @@ This plugin requires Blanket.js v1.1.5 which is currently still in development. 
 
 This plugin is based off of grunt-contrib-mocha.  For general config options and examples, please see that repo.
 
-### Overview
+### Setup
+
+## Gruntfile
+
 In your project's Gruntfile, add a section named `blanket_mocha` to the data object passed into `grunt.initConfig()`.
 
 ```js
@@ -67,11 +70,37 @@ This works the same way as it does in the base `grunt-mocha` plugin.
 
 NOTE: Be sure to include the blanketJS script tag in your test html file
 
-### BlanketJS HTML Report
+## Blanket Adapter
+
+To allow Blanket to communicate with the parent Grunt process, add this snippet in your test HTML, after all the 
+other scripts:
+
+```html
+<script>
+    if (window.PHANTOMJS) {
+        blanket.options("reporter", "../node_modules/grunt-blanket-mocha/support/grunt-reporter.js");            
+    }
+</script>
+```
+
+NOTE: The above path is assuming that the specs are being run from a directory one deeper than the root directory.  
+Adjust the path accordingly.
+
+NOTE 2: The conditional `if (window.PHANTOMJS)` statement is there because of the hacky way that messages are passed
+between an HTML page and the PhantomJS process (using alerts).  Without this condition, you would get bombarded 
+with alert messages in your in-browser mocha report.
+
+## BlanketJS HTML Report
 
 If you want to see blanketJS coverage reports in the browser as well (useful for visually scanning which lines have 
-coverage and which do not) also copy the file `html-adapter/mocha-blanket.js` from this repo and include it in your 
-test html file via a script tag after blanket and mocha.
+coverage and which do not) include this snippet it in your test html blanket and mocha.
+
+```html
+<script type="text/javascript" src="../node_modules/grunt-blanket-mocha/support/mocha-blanket.js"></script>
+```
+
+NOTE: The above path is assuming that the specs are being run from a directory one deeper than the root directory.  
+Adjust the path accordingly.
 
 ### Options
 
@@ -148,7 +177,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-### 0.1.2
+### 0.1.3
 *Released 31 July 2013*
 
 * Initial release
