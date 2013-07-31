@@ -48,9 +48,9 @@ This plugin requires Blanket.js v1.1.5 which is currently still in development. 
 
 This plugin is based off of grunt-contrib-mocha.  For general config options and examples, please see that repo.
 
-### Setup
+## Setup
 
-## Gruntfile
+### Gruntfile
 
 In your project's Gruntfile, add a section named `blanket_mocha` to the data object passed into `grunt.initConfig()`.
 
@@ -70,7 +70,7 @@ This works the same way as it does in the base `grunt-mocha` plugin.
 
 NOTE: Be sure to include the blanketJS script tag in your test html file
 
-## Blanket Adapter
+### Blanket Adapter
 
 To allow Blanket to communicate with the parent Grunt process, add this snippet in your test HTML, after all the 
 other scripts:
@@ -90,7 +90,7 @@ NOTE 2: The conditional `if (window.PHANTOMJS)` statement is there because of th
 between an HTML page and the PhantomJS process (using alerts).  Without this condition, you would get bombarded 
 with alert messages in your in-browser mocha report.
 
-## BlanketJS HTML Report
+### BlanketJS HTML Report
 
 If you want to see blanketJS coverage reports in the browser as well (useful for visually scanning which lines have 
 coverage and which do not) include this snippet it in your test html blanket and mocha.
