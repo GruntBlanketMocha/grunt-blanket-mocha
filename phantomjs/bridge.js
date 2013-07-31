@@ -34,6 +34,31 @@
       });
     }
 
+    function createBlanketReporter(runner) {
+        runner.on('start', function() {
+            window.blanket.setupCoverage();
+        });
+
+        runner.on('end', function() {
+            window.blanket.onTestsDone();
+        });
+
+        runner.on('suite', function() {
+            window.blanket.onModuleStart();
+        });
+
+        runner.on('test', function() {
+            window.blanket.onTestStart();
+        });
+
+        runner.on('test end', function(test) {
+            window.blanket.onTestDone(test.parent.tests.length, test.state === 'passed');
+        });
+
+        //I dont know why these became global leaks
+        runner.globals(['stats', 'failures', 'runner']);
+    }
+
     var GruntReporter = function(runner){
       // 1.4.2 moved reporters to Mocha instead of mocha
       var mochaInstance = window.Mocha || window.mocha;
@@ -61,6 +86,8 @@
       for(var i = 0; i < events.length; i++) {
         createGruntListener(events[i], runner);
       }
+
+      createBlanketReporter(runner);
 
     };
 

@@ -1,20 +1,22 @@
-/*
- * grunt
- * https://github.com/cowboy/grunt
- *
- * Copyright (c) 2012 "Cowboy" Ben Alman
- * Licensed under the MIT license.
- * http://benalman.com/about/license/
- *
- * Mocha task
- * Copyright (c) 2012 Kelly Miyashiro
- * Licensed under the MIT license.
- * http://benalman.com/about/license/
- */
+// grunt-blanket-qunit 0.2.0
+//
+// Copyright (C) 2013 Dave Cadwallader, Model N, Inc.
+// Distributed under the MIT License
+//
+// Documentation and full license available at:
+// https://github.com/ModelN/grunt-blanket-qunit
+//
+// Based on grunt-mocha
+// https://github.com/kmiyashiro/grunt-mocha
+// Copyright (c) 2012 "Cowboy" Ben Alman, contributors
+
 
 'use strict';
 
 module.exports = function(grunt) {
+
+  var ok = true;
+
   var _ = grunt.util._;
 
   // Nodejs libs.
@@ -30,6 +32,14 @@ module.exports = function(grunt) {
 
   var reporter;
 
+    var status, coverageThreshold, modulePattern, modulePatternRegex;
+    var totals = {
+        totalLines: 0,
+        coveredLines: 0,
+        moduleTotalStatements : {},
+        moduleTotalCoveredStatements : {}
+    };
+
   // Growl is optional
   var growl;
   try {
@@ -42,10 +52,70 @@ module.exports = function(grunt) {
   // Get an asset file, local to the root of the project.
   var asset = path.join.bind(null, __dirname, '..');
 
+    var printPassFailMessage = function(name, numCovered, numTotal, threshold, printPassing) {
+        var percent = (numCovered / numTotal) * 100;
+        var pass = (percent >= threshold);
+
+        var result = pass ? "PASS" : "FAIL";
+
+        var percentDisplay = Math.floor(percent);
+        if (percentDisplay < 10) {
+            percentDisplay = "  " + percentDisplay;
+        } else if (percentDisplay < 100) {
+            percentDisplay = " " + percentDisplay;
+        }
+
+        var msg = result + " [" + percentDisplay + "%] : " + name + " (" + numCovered + " / " + numTotal + ")";
+
+        status.blanketTotal++;
+        if (pass) {
+            status.blanketPass++;
+            if (printPassing || grunt.option('verbose')) {
+                grunt.log.writeln(msg.green);
+            }
+        } else {
+            ok = false;
+            status.blanketFail++;
+            grunt.log.writeln(msg.red);
+        }
+
+    };
+
+
   // Manage runners listening to phantomjs
   var phantomjsEventManager = (function() {
     var listeners = {};
     var suites = [];
+
+        phantomjs.on('blanket:done', function() {
+            phantomjs.halt();
+        });
+
+        phantomjs.on('blanket:fileDone', function(thisTotal, filename) {
+
+            if (status.blanketPass === 0 && status.blanketFail === 0 ) {
+                grunt.log.writeln();
+            }
+
+            var coveredLines = thisTotal[0];
+            var totalLines = thisTotal[1];
+
+            printPassFailMessage(filename, coveredLines, totalLines, coverageThreshold);
+
+            totals.totalLines += totalLines;
+            totals.coveredLines += coveredLines;
+
+            if (modulePatternRegex) {
+                var moduleName = filename.match(modulePatternRegex)[1];
+                if(!totals.moduleTotalStatements.hasOwnProperty(moduleName)) {
+                    totals.moduleTotalStatements[moduleName] = 0;
+                    totals.moduleTotalCoveredStatements[moduleName] = 0;
+                }
+
+                totals.moduleTotalStatements[moduleName] += totalLines;
+                totals.moduleTotalCoveredStatements[moduleName] += coveredLines;
+            }
+        });
 
     // Hook on Phantomjs Mocha reporter events.
     phantomjs.on('mocha.*', function(test) {
@@ -103,6 +173,11 @@ module.exports = function(grunt) {
     grunt.warn('PhantomJS unable to load "' + url + '" URI.', 90);
   });
 
+    phantomjs.on("error.onError", function(msg, trace) {
+        grunt.log.error(msg);
+        grunt.log.error(trace);
+    });
+
   phantomjs.on('fail.timeout', function() {
     phantomjs.halt();
     grunt.log.writeln();
@@ -135,6 +210,15 @@ module.exports = function(grunt) {
       // Fail with grunt.warn on first test failure
       bail: false
     });
+
+        status = {blanketTotal: 0, blanketPass: 0, blanketFail: 0};
+        coverageThreshold = grunt.option('threshold') || options.threshold;
+        var grep = grunt.option('grep');
+        options.mocha = options.mocha || {};
+
+        if (grep) {
+            options.mocha.grep = grep;
+        }
 
     // console.log pass-through.
     if (options.log) {
@@ -241,10 +325,57 @@ module.exports = function(grunt) {
     },
     // All tests have been run.
     function() {
+
+                    grunt.log.writeln();
+                    grunt.log.writeln("Per-File Coverage Results: (" + coverageThreshold + "% minimum)");
+
+                    if (status.blanketFail > 0) {
+                        var failMsg = "FAIL : " + (status.blanketFail + "/" + status.blanketTotal + " files failed coverage");
+                        grunt.log.write(failMsg.red);
+                        grunt.log.writeln();
+                        ok = false;
+                    } else {
+                        var blanketPassMsg = "PASS : " + status.blanketPass + " files passed coverage ";
+                        grunt.log.write(blanketPassMsg.green);
+                        grunt.log.writeln();
+                    }
+
+                    var moduleThreshold = grunt.option('moduleThreshold') || options.moduleThreshold;
+
+                    if (moduleThreshold) {
+
+                        grunt.log.writeln();
+
+                        grunt.log.writeln("Per-Module Coverage Results: (" + moduleThreshold + "% minimum)");
+
+                        if (modulePatternRegex) {
+                            for (var thisModuleName in totals.moduleTotalStatements) {
+                                if (totals.moduleTotalStatements.hasOwnProperty(thisModuleName)) {
+
+                                    var moduleTotalSt = totals.moduleTotalStatements[thisModuleName];
+                                    var moduleTotalCovSt = totals.moduleTotalCoveredStatements[thisModuleName];
+
+                                    printPassFailMessage(thisModuleName, moduleTotalCovSt, moduleTotalSt, moduleThreshold, /*printPassing*/true);
+                                }
+                            }
+                        }
+                    }
+
+                    var globalThreshold = grunt.option('globalThreshold') || options.globalThreshold;
+
+                    if (globalThreshold) {
+                        grunt.log.writeln();
+                        grunt.log.writeln("Global Coverage Results: (" + globalThreshold + "% minimum)");
+                        printPassFailMessage("global", totals.coveredLines, totals.totalLines, globalThreshold, /*printPassing*/true);
+                    }
+                    grunt.log.writeln();
+
+                    grunt.log.write("Unit Test Results: ");
+
       var stats = helpers.reduceStats(testStats);
 
       if (stats.failures === 0) {
-        var okMsg = stats.tests + ' passed!' + ' (' + stats.duration + 's)';
+        var okMsg = stats.tests + ' specs passed!' + ' (' + stats.duration + 's)';
 
         growl(okMsg, {
           image: asset('growl/ok.png'),
@@ -252,7 +383,8 @@ module.exports = function(grunt) {
           priority: 3
         });
 
-        grunt.log.ok(okMsg);
+        grunt.log.write(okMsg.green);
+        grunt.log.writeln();
       } else {
         var failMsg = stats.failures + '/' + stats.tests + ' tests failed (' +
           stats.duration + 's)';
@@ -264,7 +396,14 @@ module.exports = function(grunt) {
           priority: 3
         });
 
-        grunt.warn(failMsg);
+        grunt.log.write(failMsg.red);
+        grunt.log.writeln();
+      }
+
+      if (!ok) {
+        grunt.warn("Issues were found.");
+      } else {
+        grunt.log.ok("No issues found.");
       }
 
       // Async test done

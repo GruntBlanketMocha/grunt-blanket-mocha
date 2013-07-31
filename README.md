@@ -1,141 +1,154 @@
-Automatically run *client-side* mocha specs via grunt/mocha/PhantomJS
+# grunt-blanket-mocha
 
-For a grunt task for server-side mocha tests, see [grunt-mocha-test](https://github.com/pghalliday/grunt-mocha-test) or [grunt-simple-mocha](https://github.com/yaymukund/grunt-simple-mocha)
+> Headless Blanket.js code coverage and Mocha testing via PhantomJS
 
-# Grunt Compatibility
+## Wat?
 
-* Grunt 0.4 use grunt-mocha 0.2+
-* Grunt 0.3 use grunt-mocha 0.1
+Other plugins look similar, but are different in that they:
 
-**Grunt 0.4.0 migration details in [HISTORY.md](HISTORY.md#020)**
+* Only test *server-side* code
+* Create *new instrumented copies* of your source code for coverage detection
+* Generate coverage reports in HTML or JSON formats requiring a separate step to parse and evaluate coverage
+* Do not *enforce* coverage thresholds, but just report on it
 
-# grunt-mocha
+This plugin, however:
 
-(package/README format heavily borrowed from [grunt-jasmine-task](https://github.com/creynders/grunt-jasmine-task) and builtin QUnit task)
+* Runs *client-side* mocha specs
+* Performs code coverage "live" using PhantomJS, without creating separate instrumented copies
+* Reports coverage info directly to the Grunt task
+* Will fail the build if minimum coverage thresholds are not defined
 
-[Grunt](https://github.com/cowboy/grunt) plugin for running Mocha browser specs in a headless browser (PhantomJS)
+## Parent Plugin
+
+This plugin is based on [kmiyashiro/grunt-mocha](https://github.com/kmiyashiro/grunt-mocha) and supports all the 
+configurations of that plugin.  Please see that repo for more options on configuration.
 
 ## Getting Started
+This plugin requires Grunt `~0.4.1`
 
-### Task config
+If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
+
+```shell
+npm install grunt-blanket-mocha --save-dev
+```
+
+Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-mocha: {
-  // runs all html files (except test2.html) in the test dir
-  // In this example, there's only one, but you can add as many as
-  // you want. You can split them up into different groups here
-  // ex: admin: [ 'test/admin.html' ]
-  all: [ 'test/**/!(test2).html' ],
+grunt.loadNpmTasks('grunt-blanket-mocha');
+```
 
-  // Runs 'test/test2.html' with specified mocha options.
-  // This variant auto-includes 'bridge.js' so you do not have
-  // to include it in your HTML spec file. Instead, you must add an
-  // environment check before you run `mocha.run` in your HTML.
-  test2: {
-    // Test files
-    src: [ 'example/test/test2.html' ],
+## Blanket.js dependency
+
+This plugin requires Blanket.js v1.1.5 which is currently still in development.  Check the blanket.js version in the [dev branch](https://github.com/alex-seville/blanket/blob/development/dist/mocha/blanket.js) in the meantime.  
+
+## The "blanket_mocha" task
+
+### See Also
+
+This plugin is based off of grunt-contrib-mocha.  For general config options and examples, please see that repo.
+
+### Overview
+In your project's Gruntfile, add a section named `blanket_mocha` to the data object passed into `grunt.initConfig()`.
+
+```js
+grunt.initConfig({
+  blanket_mocha: {
+    all: [ 'specs/index.html' ],
     options: {
-      // Bail means if a test fails, grunt will abort. False by default.
-      bail: true,
-
-      // Pipe output console.log from your JS to grunt. False by default.
-      log: true,
-
-      // mocha options
-      mocha: {
-        ignoreLeaks: false,
-        grep: 'food'
-      },
-
-      // Select a Mocha reporter
-      // http://visionmedia.github.com/mocha/#reporters
-      reporter: 'Nyan',
-
-      // Indicates whether 'mocha.run()' should be executed in
-      // 'bridge.js'. If you include `mocha.run()` in your html spec,
-      // check if environment is PhantomJS. See example/test/test2.html
-      run: true,
-
-      // Override the timeout of the test (default is 5000)
-      timeout: 10000
-    }
-  },
-
-  // Runs the same as test2 but with URL's
-  test3: {
-    // Task options
-    options: {
-      // mocha options
-      mocha: {
-        ignoreLeaks: false,
-        grep: 'food'
-      },
-
-      // URLs passed through as options
-      urls: [ 'http://localhost:' + port + '/example/test/test2.html' ],
-
-      // Indicates whether 'mocha.run()' should be executed in 'bridge.js'
-      run: true
+        threshold: 70
     }
   }
-}
+})
 ```
 
-### Vanilla JS
+Use the `all` param to specify where your mocha browser spec HTML file lives.  
+This works the same way as it does in the base `grunt-mocha` plugin.  
 
-#### Option 1 (recommended)
+NOTE: Be sure to include the blanketJS script tag in your test html file
 
-- Write mocha task description in grunt config using and specify `run: true` option (see [this tasks Gruntfile.js](Gruntfile.js) for details);
-- Check for PhantomJS `userAgent` in a test html file and run tests only in a real browser (see [test2.html](example/test/test2.html) for details).
+### BlanketJS HTML Report
 
-In this case you shouldn't include [bridge.js](phantomjs/bridge.js) (it will be included automatically) and tests will be run from [bridge.js](phantomjs/bridge.js).
+If you want to see blanketJS coverage reports in the browser as well (useful for visually scanning which lines have 
+coverage and which do not) also copy the file `html-adapter/mocha-blanket.js` from this repo and include it in your 
+test html file via a script tag after blanket and mocha.
 
-#### Option 2
+### Options
 
-Alternatively, include `bridge.js` from `tasks/phantomjs` after you include `mocha.js` and run `mocha.setup` in your HTML file. The helper will override `mocha.setup` if it detects PhantomJS. See [test.html](example/test/test.html).
+#### options.threshold
+Type: `Number`
+Default value: `60`
 
-### AMD
+The minimum percent coverage per-file.  Any files that have coverage below this threshold will fail the build.  By default, only the failing files will be output in the console.  To show passing files as well, use the grunt `--verbose` option.
 
-Mocha **must** be included via script tag in the header. There is no need to load Mocha via AMD. You may load other testing libs via AMD if that gives you a fuzzy feeling.
+#### options.moduleThreshold
+Type: `Number`
+Default value: undefined
 
-Example setup with AMD (advanced): https://gist.github.com/2655876
+The minimum percent coverage per-module.  Any modules that have coverage below this threshold will fail the build.  Both passing and failing module statistics will be shown in the output.
 
-### Grunt and this plugin
+This option requires that the `modulePattern` property is also set (see below).
 
-First, make sure you have grunt installed globally, `npm install grunt -g`
+#### options.modulePattern
+Type: `RegEx`
+Default value: undefined
 
-Install this grunt plugin next to your project's [Gruntfile.js](http://gruntjs.com/getting-started) with: `npm install grunt-mocha`
+A regular expression defining how to extract a module name from the path of a covered file.  The regular expression should include
+a single parenthetical expression which will be matched as the module name.  For example, to define the module name as the text
+in between the first two slashes, you could use:
 
-Then add this line to your project's `Gruntfile.js` gruntfile at the bottom:
-
-```javascript
-grunt.loadNpmTasks('grunt-mocha');
+```
+modulePattern: "./(.*?)/"
 ```
 
-Also add this to the `grunt.initConfig` object in the same file:
+#### options.globalThreshold
+Type: `Number`
+Default value: undefined
 
-```javascript
-mocha: {
-  index: ['specs/index.html']
-},
-```
+The minimum percent coverage overall, averaged for all files.  An average coverage percentage below this 
+value will fail the build.Both passing and failing module statistics will be shown in the output.
 
-Replace `specs/index.html` with the location of your mocha spec running html file.
 
-Now you can run the mocha task with `grunt mocha`, but it won't work. That's because you need...
+### Command Line Options
 
-### PhantomJS
+#### threshold
 
-This task is for running Mocha tests in a headless browser, PhantomJS, which is installed via [grunt-lib-phantomjs](https://github.com/gruntjs/grunt-lib-phantomjs) as a dependency of this task.
+Override the threshold specified in the Gruntfile.  
 
-### Mocha
+For example, if you wanted to test your files using a 90% threshold, and the Gruntfile had a different threshold specified, you could override it like so:
 
-Use [Mocha](http://visionmedia.github.com/mocha/)
+`grunt --threshold=90`
 
-### Hacks
+#### moduleThreshold
 
-The PhantomJS -> Grunt superdimensional conduit uses `alert`. If you have disabled or aliased alert in your app, this won't work. I have conveniently set a global `PHANTOMJS` on `window` so you can conditionally override alert in your app.
+Override the moduleThreshold specified in the Gruntfile.  
 
-## License
-Copyright (c) 2013 Kelly Miyashiro
-Licensed under the MIT license.
+For example, if you wanted to test your files using a 90% module threshold, and the Gruntfile had a different module threshold specified, you could override it like so:
+
+`grunt --moduleThreshold=90`
+
+#### globalThreshold
+
+Override the globalThreshold specified in the Gruntfile.  
+
+For example, if you wanted to test your files using a 90% global threshold, and the Gruntfile had a different global threshold specified, you could override it like so:
+
+`grunt --globalThreshold=90`
+
+#### grep
+
+Only run test specs that match a certain pattern.
+
+For example, if you only wanted to run specs that match the word "login" you could run:
+
+`grunt --grep="login"`
+
+## Contributing
+In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
+
+## Release History
+
+### 0.1.0
+*Released 31 July 2013*
+
+* Initial release

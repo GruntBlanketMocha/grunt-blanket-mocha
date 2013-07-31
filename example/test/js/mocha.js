@@ -1557,7 +1557,7 @@ Mocha.prototype.run = function(fn){
   return runner.run(fn);
 };
 
-}); // module: mocha.js
+}); // module: blanket_mocha.js
 
 require.register("ms.js", function(module, exports, require){
 
@@ -5229,7 +5229,7 @@ exports.highlightTags = function(name) {
  * Node shims.
  *
  * These are meant only to allow
- * mocha.js to run untouched, not
+ * blanket_mocha.js to run untouched, not
  * to allow running node code in
  * the browser.
  */
