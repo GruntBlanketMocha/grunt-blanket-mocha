@@ -191,7 +191,7 @@ module.exports = function(grunt) {
   // TASKS
   // ==========================================================================
 
-  grunt.registerMultiTask('mocha', 'Run Mocha unit tests in a headless PhantomJS instance.', function() {
+  grunt.registerMultiTask('blanket_mocha', 'Run Mocha unit tests in a headless PhantomJS instance.', function() {
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({

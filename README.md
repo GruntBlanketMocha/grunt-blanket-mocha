@@ -14,7 +14,7 @@ Other plugins look similar, but are different in that they:
 This plugin, however:
 
 * Runs *client-side* mocha specs
-* Performs code coverage "live" using PhantomJS, without creating separate instrumented copies
+* Performs code coverage "live" using BlanketJS, without creating separate instrumented copies
 * Reports coverage info directly to the Grunt task
 * Will fail the build if minimum coverage thresholds are not defined
 
@@ -148,7 +148,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-### 0.1.0
+### 0.1.1
 *Released 31 July 2013*
 
 * Initial release
