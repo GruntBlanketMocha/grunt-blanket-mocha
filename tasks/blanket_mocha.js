@@ -1,4 +1,4 @@
-// grunt-blanket-mocha 0.1.3
+// grunt-blanket-mocha 0.2.0
 //
 // Copyright (C) 2013 Dave Cadwallader, Model N, Inc.
 // Distributed under the MIT License
@@ -382,7 +382,8 @@ module.exports = function(grunt) {
         grunt.log.write(okMsg.green);
         grunt.log.writeln();
       } else {
-        var failMsg = stats.failures + '/' + stats.tests + ' tests failed (' +
+          ok = false;
+          var failMsg = stats.failures + '/' + stats.tests + ' tests failed (' +
           stats.duration + 's)';
 
         // Show Growl notice, if avail

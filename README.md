@@ -177,6 +177,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+### 0.2.0
+*Released 1 August 2013*
+
+* Fix issue where failing mocha test did not fail the build
+
 ### 0.1.3
 *Released 31 July 2013*
 
