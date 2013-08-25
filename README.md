@@ -195,6 +195,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+### 0.3.0
+*Released 25 August 2013*
+
+* Add ability to manually exclude files(shows as 'skipped')
+
 ### 0.2.0
 *Released 1 August 2013*
 
