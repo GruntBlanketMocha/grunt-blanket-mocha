@@ -1,7 +1,7 @@
 {
     "name": "grunt-blanket-mocha",
     "description": "Headless Blanket.js code coverage and Mocha testing via PhantomJS",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "homepage": "https://github.com/ModelN/grunt-blanket-mocha",
     "author": {
         "name": "Dave Cadwallader",
@@ -41,6 +41,12 @@
         "grunt-contrib-jshint": "~0.3"
     },
     "keywords": [
-        "gruntplugin blanket blanketjs coverage mocha test phantomjs"
+        "gruntplugin",
+        "blanket",
+        "blanketjs",
+        "coverage",
+        "mocha",
+        "test",
+        "phantomjs"
     ]
 }

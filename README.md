@@ -195,6 +195,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+### 0.3.1
+*Released 6 September 2013*
+
+* Fix keyword listing so the plugin shows up in Grunt plugins repo
+
 ### 0.3.0
 *Released 25 August 2013*
 
