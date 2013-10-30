@@ -145,10 +145,48 @@ List filenames that need to be excluded. This will inform the Grunt Task to not 
 SKIP: [..%] filename
 
 Example:
-`excludedFiles: [
+
+```js
+excludedFiles: [
   "./src/my/file1.js",
   "./src/my/project/file2.js"
-]` 
+]
+``` 
+
+#### options.customThreshold
+Type: `Object`
+Default value: undefined
+
+List filenames that should have their own special threshold.  This is useful for the case when there are a few files with poor
+coverage in your project, and you don't want them to hold you back from enforcing an overall high threshold.  Or you may have
+certain files that you want to hold to a higher standard than others, using a higher threshold.
+
+Example:
+
+```js
+customThreshold: {
+  "./src/my/file1.js" : 33,
+  "./src/my/project/file2.js" : 45
+}
+``` 
+
+#### options.customModuleThreshold
+Type: `Object`
+Default value: undefined
+
+List module names that should have their own special threshold.  This is useful for the case when there are a few modules with poor
+coverage in your project, and you don't want them to hold you back from enforcing an overall high threshold. Or you may have
+certain modules that you want to hold to a higher standard than others, using a higher threshold.
+
+Example:
+
+```js
+customModuleThreshold: {
+  "users" : 60,
+  "security" : 90
+}
+``` 
+
 
 ### Command Line Options
 
@@ -194,6 +232,12 @@ For example, if you only wanted to run specs that match the word "login" you cou
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+
+### 0.3.2
+*Released 30 October 2013*
+
+* Add ability to define custom thresholds for files and modules. 
+* Fix bug where module thresholds were not being reported or enforced correctly.
 
 ### 0.3.1
 *Released 6 September 2013*
