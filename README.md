@@ -233,6 +233,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+### 0.3.3
+*Released 12 November 2013*
+
+* Bump dependencies for PhantomJS, Mocha, JSHint
+
 ### 0.3.2
 *Released 30 October 2013*
 
