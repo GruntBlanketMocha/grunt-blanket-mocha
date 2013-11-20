@@ -76,8 +76,8 @@ module.exports = function(grunt) {
             operator = "=";
         }
 
-        var msg = result + " [" + percentDisplay + "% " + operator +  " " + threshold  + "% ] : "
-                + name + " (" + numCovered + " / " + numTotal + ")";
+        var msg = result + " [" + percentDisplay + "% " + operator +  " " + threshold  + "% ] : " +
+                name + " (" + numCovered + " / " + numTotal + ")";
 
         status.blanketTotal++;
         if (pass) {
@@ -356,7 +356,7 @@ module.exports = function(grunt) {
 
                     grunt.log.writeln();
 
-                    var customThresholdMsg = "";
+                    var customThresholdMsg = "", failMsg = "";
                     var numCustomThreshold = Object.keys(customThreshold ).length;
                     if (numCustomThreshold) {
                         customThresholdMsg = "; " + numCustomThreshold + " files used custom threshold";
@@ -365,7 +365,7 @@ module.exports = function(grunt) {
                     grunt.log.writeln("Per-File Coverage Results: (" + coverageThreshold + "% minimum" + customThresholdMsg + ")");
 
                     if (status.blanketFail > 0) {
-                        var failMsg = "FAIL : " + (status.blanketFail + "/" + status.blanketTotal + " files failed coverage");
+                        failMsg = "FAIL : " + (status.blanketFail + "/" + status.blanketTotal + " files failed coverage");
                         grunt.log.write(failMsg.red);
                         grunt.log.writeln();
                         ok = false;
@@ -430,7 +430,7 @@ module.exports = function(grunt) {
                         grunt.log.writeln();
                     } else {
                         ok = false;
-                        var failMsg = stats.failures + '/' + stats.tests + ' tests failed (' +
+                        failMsg = stats.failures + '/' + stats.tests + ' tests failed (' +
                                 stats.duration + 's)';
 
                         // Show Growl notice, if avail
