@@ -20,7 +20,7 @@ This plugin, however:
 
 ## Parent Plugin
 
-This plugin is based on [kmiyashiro/grunt-mocha](https://github.com/kmiyashiro/grunt-mocha) and supports all the 
+This plugin is based on [kmiyashiro/grunt-mocha](https://github.com/kmiyashiro/grunt-mocha) and supports all the
 configurations of that plugin.  Please see that repo for more options on configuration.
 
 ## Getting Started
@@ -40,7 +40,7 @@ grunt.loadNpmTasks('grunt-blanket-mocha');
 
 ## Blanket.js dependency
 
-This plugin requires Blanket.js v1.1.5 which is currently still in development.  Check the blanket.js version in the [dev branch](https://github.com/alex-seville/blanket/blob/development/dist/mocha/blanket.js) in the meantime.  
+This plugin requires Blanket.js v1.1.5 which is currently still in development.  Check the blanket.js version in the [dev branch] (https://raw.github.com/alex-seville/blanket/development/dist/mocha/blanket_mocha.js) in the meantime.
 
 ## The "blanket_mocha" task
 
@@ -65,41 +65,41 @@ grunt.initConfig({
 })
 ```
 
-Use the `all` param to specify where your mocha browser spec HTML file lives.  
-This works the same way as it does in the base `grunt-mocha` plugin.  
+Use the `all` param to specify where your mocha browser spec HTML file lives.
+This works the same way as it does in the base `grunt-mocha` plugin.
 
 NOTE: Be sure to include the blanketJS script tag in your test html file
 
 ### Blanket Adapter
 
-To allow Blanket to communicate with the parent Grunt process, add this snippet in your test HTML, after all the 
+To allow Blanket to communicate with the parent Grunt process, add this snippet in your test HTML, after all the
 other scripts:
 
 ```html
 <script>
     if (window.PHANTOMJS) {
-        blanket.options("reporter", "../node_modules/grunt-blanket-mocha/support/grunt-reporter.js");            
+        blanket.options("reporter", "../node_modules/grunt-blanket-mocha/support/grunt-reporter.js");
     }
 </script>
 ```
 
-NOTE: The above path is assuming that the specs are being run from a directory one deeper than the root directory.  
+NOTE: The above path is assuming that the specs are being run from a directory one deeper than the root directory.
 Adjust the path accordingly.
 
 NOTE 2: The conditional `if (window.PHANTOMJS)` statement is there because of the hacky way that messages are passed
-between an HTML page and the PhantomJS process (using alerts).  Without this condition, you would get bombarded 
+between an HTML page and the PhantomJS process (using alerts).  Without this condition, you would get bombarded
 with alert messages in your in-browser mocha report.
 
 ### BlanketJS HTML Report
 
-If you want to see blanketJS coverage reports in the browser as well (useful for visually scanning which lines have 
+If you want to see blanketJS coverage reports in the browser as well (useful for visually scanning which lines have
 coverage and which do not) include this snippet it in your test html blanket and mocha.
 
 ```html
 <script type="text/javascript" src="../node_modules/grunt-blanket-mocha/support/mocha-blanket.js"></script>
 ```
 
-NOTE: The above path is assuming that the specs are being run from a directory one deeper than the root directory.  
+NOTE: The above path is assuming that the specs are being run from a directory one deeper than the root directory.
 Adjust the path accordingly.
 
 ### Options
@@ -134,7 +134,7 @@ modulePattern: "./(.*?)/"
 Type: `Number`
 Default value: undefined
 
-The minimum percent coverage overall, averaged for all files.  An average coverage percentage below this 
+The minimum percent coverage overall, averaged for all files.  An average coverage percentage below this
 value will fail the build.Both passing and failing module statistics will be shown in the output.
 
 #### options.excludedFiles
@@ -151,7 +151,7 @@ excludedFiles: [
   "./src/my/file1.js",
   "./src/my/project/file2.js"
 ]
-``` 
+```
 
 #### options.customThreshold
 Type: `Object`
@@ -168,7 +168,7 @@ customThreshold: {
   "./src/my/file1.js" : 33,
   "./src/my/project/file2.js" : 45
 }
-``` 
+```
 
 #### options.customModuleThreshold
 Type: `Object`
@@ -185,14 +185,14 @@ customModuleThreshold: {
   "users" : 60,
   "security" : 90
 }
-``` 
+```
 
 
 ### Command Line Options
 
 #### threshold
 
-Override the threshold specified in the Gruntfile.  
+Override the threshold specified in the Gruntfile.
 
 For example, if you wanted to test your files using a 90% threshold, and the Gruntfile had a different threshold specified, you could override it like so:
 
@@ -200,7 +200,7 @@ For example, if you wanted to test your files using a 90% threshold, and the Gru
 
 #### moduleThreshold
 
-Override the moduleThreshold specified in the Gruntfile.  
+Override the moduleThreshold specified in the Gruntfile.
 
 For example, if you wanted to test your files using a 90% module threshold, and the Gruntfile had a different module threshold specified, you could override it like so:
 
@@ -208,7 +208,7 @@ For example, if you wanted to test your files using a 90% module threshold, and 
 
 #### globalThreshold
 
-Override the globalThreshold specified in the Gruntfile.  
+Override the globalThreshold specified in the Gruntfile.
 
 For example, if you wanted to test your files using a 90% global threshold, and the Gruntfile had a different global threshold specified, you could override it like so:
 
@@ -216,7 +216,7 @@ For example, if you wanted to test your files using a 90% global threshold, and 
 
 #### excludedFiles
 
-List the files to be excluded as an array.  
+List the files to be excluded as an array.
 Example,
 `grunt --excludedFiles=["./src/my/file1.js", "./src/my/project/file2.js"]`
 
@@ -241,7 +241,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 ### 0.3.2
 *Released 30 October 2013*
 
-* Add ability to define custom thresholds for files and modules. 
+* Add ability to define custom thresholds for files and modules.
 * Fix bug where module thresholds were not being reported or enforced correctly.
 
 ### 0.3.1
