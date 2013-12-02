@@ -64,6 +64,15 @@
             originalReporter(runner);
         };
 
+    // From mocha.js HTML reporter
+    blanketReporter.prototype.suiteURL = function(suite){
+      return '?grep=' + encodeURIComponent(suite.fullTitle());
+    };
+
+    blanketReporter.prototype.testURL = function(test){
+      return '?grep=' + encodeURIComponent(test.fullTitle());
+    };
+
     mocha.reporter(blanketReporter);
     var oldRun = mocha.run,
         oldCallback = null;
