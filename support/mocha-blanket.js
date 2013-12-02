@@ -59,9 +59,9 @@
             });
 
             //I dont know why these became global leaks
-            runner.globals(['stats', 'failures', 'runner']);
+            runner.globals(['stats', 'failures', 'runner', '_$blanket']);
 
-            originalReporter(runner);
+            originalReporter.apply(this, [runner]);
         };
 
     // From mocha.js HTML reporter
