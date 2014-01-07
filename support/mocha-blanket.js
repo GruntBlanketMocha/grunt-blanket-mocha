@@ -59,10 +59,19 @@
             });
 
             //I dont know why these became global leaks
-            runner.globals(['stats', 'failures', 'runner']);
+            runner.globals(['stats', 'failures', 'runner', '_$blanket']);
 
-            originalReporter(runner);
+            originalReporter.apply(this, [runner]);
         };
+
+    // From mocha.js HTML reporter
+    blanketReporter.prototype.suiteURL = function(suite){
+      return '?grep=' + encodeURIComponent(suite.fullTitle());
+    };
+
+    blanketReporter.prototype.testURL = function(test){
+      return '?grep=' + encodeURIComponent(test.fullTitle());
+    };
 
     mocha.reporter(blanketReporter);
     var oldRun = mocha.run,
