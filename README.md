@@ -38,9 +38,15 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-blanket-mocha');
 ```
 
-## Blanket.js dependency
+## Dependencies
 
-This plugin requires Blanket.js v1.1.5 which is currently still in development.  Check the blanket.js version in the [dev branch] (https://raw.github.com/alex-seville/blanket/development/dist/mocha/blanket_mocha.js) in the meantime.
+* Blanket.js v1.1.5. 
+* Mocha (see note below)
+
+*Note about Mocha versions:* There is a bug in BlanketJS 1.1.5 which makes it incompatible with Mocha versions greater than 1.12.1.
+You have two choices:
+1. Use the master version of BlanketJS which has [a fix for this](https://github.com/alex-seville/blanket/pull/356). Then you can use the latest version of Mocha
+2. Use Mocha 1.12.1 and BlanketJS 1.1.5.
 
 ## The "blanket_mocha" task
 
