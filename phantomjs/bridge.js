@@ -59,9 +59,10 @@
         runner.globals(['stats', 'failures', 'runner']);
     }
 
+    // 1.4.2 moved reporters to Mocha instead of mocha
+    var mochaInstance = window.Mocha || window.mocha;
+
     var GruntReporter = function(runner){
-      // 1.4.2 moved reporters to Mocha instead of mocha
-      var mochaInstance = window.Mocha || window.mocha;
 
       if (!mochaInstance) {
         throw new Error('Mocha was not found, make sure you include Mocha in your HTML spec file.');
@@ -90,6 +91,10 @@
       createBlanketReporter(runner);
 
     };
+
+    var Klass = function () {};
+    Klass.prototype = mochaInstance.reporters.HTML.prototype;
+    GruntReporter.prototype = new Klass();
 
     var options = window.PHANTOMJS;
     if (options) {
