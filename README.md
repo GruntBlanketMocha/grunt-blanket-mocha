@@ -57,6 +57,11 @@ This plugin is based off of grunt-contrib-mocha.  For general config options and
 
 ## Setup
 
+### Demo
+
+See the `example` directory for a fully-working example of the setup, including some of the scaffolding required 
+to get all the pieces to fit together.  The `README` in that directory will walk you through it.
+
 ### Gruntfile
 
 In your project's Gruntfile, add a section named `blanket_mocha` to the data object passed into `grunt.initConfig()`.
