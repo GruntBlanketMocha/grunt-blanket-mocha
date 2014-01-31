@@ -240,6 +240,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+### 0.3.4
+*Released 31 January 2014*
+
+* Fix compatibility with latest mocha versions, and some reporter issues
+
 ### 0.3.3
 *Released 12 November 2013*
 
