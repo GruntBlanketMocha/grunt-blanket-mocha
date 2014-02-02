@@ -1,5 +1,37 @@
 # History
 
+## 0.4.10
+* Actually error out if `logErrors` is true and error
+
+## 0.4.9
+* Add `logErrors` option to fail/log script errors (@demmer)
+
+## 0.4.8
+* Add test state to output for XUnit
+
+## 0.4.7
+* Explicit `done()` call with true/false so grunt exits with correct code. (@Bartvds)
+
+## 0.4.6
+* lodash is a dep, not a dev-dep
+
+## 0.4.5
+* Add `dest` output config for outputting to a file (@BYK)
+
+## 0.4.4
+* Bump example mocha to `1.14.0`
+* Compatible with mocha `1.14.0` (@perfectworks)
+* Cleanup log listeners during watch (@rayshih)
+
+## 0.4.3
+* Bump grunt-lib-phantomjs to 0.4, which uses PhantomJS 1.9.*
+
+## 0.4.2
+* Fix bail option
+
+## 0.4.1
+* Fixing package.json keywords, no functional changes
+
 ## 0.4.0
 * Support for custom reporters (@Bartvds)
 * Keep track of suites and fake test parent (@demmer)
