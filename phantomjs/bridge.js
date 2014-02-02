@@ -18,6 +18,7 @@
 
     // Create a listener who'll bubble events from Phantomjs to Grunt
     function createGruntListener(ev, runner) {
+
       runner.on(ev, function(test, err) {
         var data = {
           err: err
@@ -32,6 +33,7 @@
         }
 
         sendMessage('mocha.' + ev, data);
+
       });
     }
 
@@ -68,7 +70,6 @@
 
     var GruntReporter = function(runner){
 
-    var GruntReporter = function(runner){
       if (!mochaInstance) {
         throw new Error('Mocha was not found, make sure you include Mocha in your HTML spec file.');
       }

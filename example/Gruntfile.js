@@ -1,17 +1,23 @@
 /*global module*/
-module.exports = function(grunt) {"use strict";
+module.exports = function(grunt) {
+    
+    "use strict";
 
     grunt.initConfig({
 
-        blanket_mocha : {
-            all : ['test.html'],
-            options : {
-                threshold : 50,
-                globalThreshold : 65,
-                log : true,
-                moduleThreshold : 60,
-                modulePattern : "./src/(.*?)/"
+        blanket_mocha : {    
+            test: {
+                src: ['test.html'],                
+                options : {    
+                    threshold : 50,
+                    globalThreshold : 65,
+                    log : true,
+                    logErrors: true,
+                    moduleThreshold : 60,
+                    modulePattern : "./src/(.*?)/"
+                }                
             }
+            
         }
     });
 

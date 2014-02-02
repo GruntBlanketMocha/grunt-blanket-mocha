@@ -13,25 +13,18 @@
 
 'use strict';
 
+// Nodejs libs.
+var _             = require('lodash');
+var util          = require('util');
+var path          = require('path');
+var EventEmitter  = require('events').EventEmitter;
+var reporters     = require('mocha').reporters;
+// Helpers
+var helpers       = require('../support/mocha-helpers');
+
 module.exports = function(grunt) {
 
     var ok = true;
-
-    var _ = grunt.util._;
-
-    // Nodejs libs.
-    var path = require('path');
-    var EventEmitter = require('events').EventEmitter;
-
-    // External lib.
-    var phantomjs = require('grunt-lib-phantomjs').init(grunt);
-    var reporters = require('mocha').reporters;
-
-    // Helpers
-    var helpers = require('../support/mocha-helpers');
-
-    var reporter;
-
     var status, coverageThreshold, modulePattern, modulePatternRegex, excludedFiles, customThreshold, customModuleThreshold;
     var totals = {
         totalLines: 0,
@@ -39,6 +32,10 @@ module.exports = function(grunt) {
         moduleTotalStatements : {},
         moduleTotalCoveredStatements : {}
     };
+    // External lib.
+    var phantomjs = require('grunt-lib-phantomjs').init(grunt);
+
+    var reporter;
 
     // Growl is optional
     var growl;
@@ -188,11 +185,6 @@ module.exports = function(grunt) {
         grunt.warn('PhantomJS unable to load "' + url + '" URI.', 90);
     });
 
-    phantomjs.on("error.onError", function(msg, trace) {
-        grunt.log.error(msg);
-        grunt.log.error(trace);
-    });
-
     phantomjs.on('fail.timeout', function() {
         phantomjs.halt();
         grunt.log.writeln();
@@ -200,7 +192,7 @@ module.exports = function(grunt) {
     });
 
     // Debugging messages.
-    // phantomjs.on('debug', grunt.log.debug.bind(grunt.log, 'phantomjs'));
+    phantomjs.on('debug', grunt.log.debug.bind(grunt.log, 'phantomjs'));
 
     // ==========================================================================
     // TASKS
@@ -223,7 +215,9 @@ module.exports = function(grunt) {
             // Explicit non-file URLs to test.
             urls: [],
             // Fail with grunt.warn on first test failure
-            bail: false
+            bail: false,
+            // Log script errors as grunt errors
+            logErrors: false
         });
 
         status = {blanketTotal: 0, blanketPass: 0, blanketFail: 0};
@@ -247,26 +241,61 @@ module.exports = function(grunt) {
         if (grep) {
             options.mocha.grep = grep;
         }
-
-        // console.log pass-through.
+        
+        
+        // Output console messages if log == true
         if (options.log) {
-            phantomjs.on('console', grunt.log.writeln.bind(grunt.log));
+            phantomjs.removeAllListeners(['console']);
+            phantomjs.on('console', grunt.log.writeln);
+        } else {
+            phantomjs.off('console', grunt.log.writeln);
         }
 
-        // Clean Phantomjs options to prevent any conflicts
-        var PhantomjsOptions = _.omit(options, 'reporter', 'urls');
+        // Output errors on script errors
+        if (options.logErrors) {
+            phantomjs.on('error.*', function(error, stack) {
+                var formattedStack = _.map(stack, function(frame) {
+                    return "    at " + (frame.function ? frame.function : "undefined") + " (" + frame.file + ":" + frame.line + ")";
+                }).join("\n");
+                grunt.fail.warn(error + "\n" + formattedStack, 3);
+            });
+        }
 
-        var configStr = JSON.stringify(PhantomjsOptions, null, '  ');
-        grunt.verbose.writeln('Additional configuration: ' + configStr);
+        var optsStr = JSON.stringify(options, null, '  ');
+        grunt.verbose.writeln('Options: ' + optsStr);
+
+        // Clean Phantomjs options to prevent any conflicts
+        var PhantomjsOptions = _.omit(options, 'reporter', 'urls', 'log', 'bail');
+
+        var phantomOptsStr = JSON.stringify(PhantomjsOptions, null, '  ');
+        grunt.verbose.writeln('Phantom options: ' + phantomOptsStr);
 
         // Combine any specified URLs with src files.
-        var urls = options.urls.concat(this.filesSrc);
+        var urls = options.urls.concat(_.compact(this.filesSrc));
 
         // Remember all stats from all tests
         var testStats = [];
 
         // This task is asynchronous.
         var done = this.async();
+
+        // Hijack console.log to capture reporter output
+        var dest = this.data.dest;
+        var output = [];
+        var consoleLog = console.log;
+        // Latest mocha xunit reporter sends to process.stdout instead of console
+        var processWrite = process.stdout.write;
+
+
+        // Only hijack if we really need to
+        if (dest) {
+            console.log = function() {
+                consoleLog.apply(console, arguments);
+                // FIXME: This breaks older versions of mocha
+                // processWrite.apply(process.stdout, arguments);
+                output.push(util.format.apply(util, arguments));
+            };
+        }
 
         // Process each filepath in-order.
         grunt.util.async.forEachSeries(urls, function(url, next) {
@@ -285,20 +314,19 @@ module.exports = function(grunt) {
                     var Reporter = null;
                     if (reporters[options.reporter]) {
                         Reporter = reporters[options.reporter];
-                    }
-                    else {
+                    } else {
                         // Resolve external reporter module
-                        var p;
+                        var externalReporter;
                         try {
-                            p = require.resolve(options.reporter);
-                        }
-                        catch (e) {
+                            externalReporter = require.resolve(options.reporter);
+                        } catch (e) {
                             // Resolve to local path
-                            p = path.resolve(options.reporter);
+                            externalReporter = path.resolve(options.reporter);
                         }
-                        if (p) {
+
+                        if (externalReporter) {
                             try {
-                                Reporter = require(p);
+                                Reporter = require(externalReporter);
                             }
                             catch (e) { }
                         }
@@ -326,7 +354,7 @@ module.exports = function(grunt) {
 
                                 // If there was a PhantomJS error, abort the series.
                                 grunt.fatal(err);
-                                done();
+                                done(false);
                             } else {
                                 // If failures, show growl notice
                                 if (stats.failures > 0) {
@@ -353,7 +381,11 @@ module.exports = function(grunt) {
                 },
                 // All tests have been run.
                 function() {
-
+                    if (dest) {
+                        // Restore console.log to original and write the output
+                        console.log = consoleLog;
+                        grunt.file.write(dest, output.join('\n'));
+                    }
                     grunt.log.writeln();
 
                     var customThresholdMsg = "", failMsg = "";
