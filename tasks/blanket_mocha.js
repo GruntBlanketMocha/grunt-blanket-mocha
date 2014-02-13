@@ -24,14 +24,7 @@ var helpers       = require('../support/mocha-helpers');
 
 module.exports = function(grunt) {
 
-    var ok = true;
-    var status, coverageThreshold, modulePattern, modulePatternRegex, excludedFiles, customThreshold, customModuleThreshold;
-    var totals = {
-        totalLines: 0,
-        coveredLines: 0,
-        moduleTotalStatements : {},
-        moduleTotalCoveredStatements : {}
-    };
+    var ok, totals, status, coverageThreshold, modulePattern, modulePatternRegex, excludedFiles, customThreshold, customModuleThreshold;
     // External lib.
     var phantomjs = require('grunt-lib-phantomjs').init(grunt);
 
@@ -219,6 +212,14 @@ module.exports = function(grunt) {
             // Log script errors as grunt errors
             logErrors: false
         });
+
+        ok = true;
+        totals = {
+            totalLines: 0,
+            coveredLines: 0,
+            moduleTotalStatements : {},
+            moduleTotalCoveredStatements : {}
+        };
 
         status = {blanketTotal: 0, blanketPass: 0, blanketFail: 0};
         coverageThreshold = grunt.option('threshold') || options.threshold;
