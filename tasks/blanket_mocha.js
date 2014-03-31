@@ -105,8 +105,13 @@ module.exports = function(grunt) {
             var totalLines = thisTotal[1];
 
             var threshold = coverageThreshold;
-            if (customThreshold[filename]) {
-                threshold = customThreshold[filename];
+
+            // Check for a custom threshold
+            var custom = _.find(customThreshold, function (o) {
+                return o[0].test(filename);
+            });
+            if (custom !== undefined) {
+                threshold = custom[1];
             }
 
             printPassFailMessage(filename, coveredLines, totalLines, threshold);
@@ -236,14 +241,19 @@ module.exports = function(grunt) {
         //Users should be able to define it in the command-line as an array or include it in the test file.
         excludedFiles =  grunt.option('excludedFiles') || options.excludedFiles || [];
 
+        // Get the custom thresholds for files, normalizing the file names
         customThreshold = grunt.option('customThreshold') || options.customThreshold || {};
+        customThreshold = _(customThreshold).pairs().map(function (o) {
+            return [new RegExp(path.normalize(o[0]) + '$'), o[1]];
+        }).value();
+
         customModuleThreshold = grunt.option('customModuleThreshold') || options.customModuleThreshold|| {};
 
         if (grep) {
             options.mocha.grep = grep;
         }
-        
-        
+
+
         // Output console messages if log == true
         if (options.log) {
             phantomjs.removeAllListeners(['console']);
