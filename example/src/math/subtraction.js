@@ -1,23 +1,13 @@
-define([
+window.Math = window.Math || {}
 
-], function(){
+window.Math.subtractThree = function(subtractFrom) {
+    return subtractFrom - 3;
+};
 
-    var subtractThree = function(subtractFrom) {
-        return subtractFrom - 3;
-    };
-    
-    var subtractFive = function(subtractFrom) {
-        return subtractFrom - 5;
-    };
+window.Math.subtractFive = function(subtractFrom) {
+    return subtractFrom - 5;
+};
 
-    var subtractSeven = function(subtractFrom) {
-        return subtractFrom - 7;
-    };
-    
-    return {
-        subtractThree: subtractThree,
-        subtractFive: subtractFive,
-        subtractSeven: subtractSeven
-    }
-    
-});
+window.Math.subtractSeven = function(subtractFrom) {
+    return subtractFrom - 7;
+};
