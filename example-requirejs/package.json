@@ -16,6 +16,7 @@
     "grunt": "0.4.1",
     "mocha": "1.17.1",
     "chai": "1.8.1",
-    "blanket": "1.1.5"
+    "blanket": "1.1.5",
+    "requirejs": "2.1.10"
   }
 }

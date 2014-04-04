@@ -23,6 +23,8 @@ module.exports = function(grunt) {
         files: [
           'example/js/**/*.js',
           'example/test/spec/**/*.js',
+          'example-requirejs/js/**/*.js',
+          'example-requirejs/test/spec/**/*.js',
           'phantomjs/*',
           'tasks/*',
           'Gruntfile.js'
@@ -30,21 +32,36 @@ module.exports = function(grunt) {
         tasks: 'test'
       }
     },
-      blanket_mocha : {
-          test: {
-              src: ['example/test.html'],
-              options : {
-                  threshold : 50,
-                  globalThreshold : 65,
-                  log : true,
-                  logErrors: true,
-                  moduleThreshold : 60,
-                  modulePattern : "./src/(.*?)/"
-              }
+    blanket_mocha : {
+      test: {
+        src: ['example/test.html'],
+        options : {
+          threshold : 60,
+          globalThreshold : 65,
+          log : true,
+          logErrors: true,
+          moduleThreshold : 60,
+          modulePattern : "./src/(.*?)/",
+          customThreshold: {
+            './src/spelling/plurals.js': 50
           }
-
+        }
       },
-
+      test_requirejs: {
+        src: ['example-requirejs/test.html'],
+        options : {
+          threshold : 60,
+          globalThreshold : 65,
+          log : true,
+          logErrors: true,
+          moduleThreshold : 60,
+          modulePattern : "./src/(.*?)/",
+          customThreshold: {
+            './src/spelling/plurals.js': 50
+          }
+        }
+      }
+    },
     connect: {
       testUrls: {
         options: {
@@ -89,5 +106,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // By default, lint and run all tests.
-  grunt.task.registerTask('default', ['jshint', 'blanket_mocha']);
+  grunt.task.registerTask('default', [
+    'jshint', 'blanket_mocha:test', 'blanket_mocha:test_requirejs'
+  ]);
 };

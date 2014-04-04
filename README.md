@@ -42,7 +42,7 @@ grunt.loadNpmTasks('grunt-blanket-mocha');
 
 ## Dependencies
 
-* Blanket.js (tested with v1.1.5) 
+* Blanket.js (tested with v1.1.5)
 * Mocha (tested with v1.14.0)
 
 ## The "blanket_mocha" task
@@ -55,8 +55,7 @@ This plugin is based off of grunt-contrib-mocha.  For general config options and
 
 ### Demo
 
-See the `example` directory for a fully-working example of the setup, including some of the scaffolding required 
-to get all the pieces to fit together.  The `README` in that directory will walk you through it.
+See the `example` and `example-requires` directories for a fully-working examples of the setup, including some of the scaffolding required to get all the pieces to fit together.  The `README` in that directory will walk you through it.
 
 ### Gruntfile
 
@@ -66,10 +65,10 @@ In your project's Gruntfile, add a section named `blanket_mocha` to the data obj
 grunt.initConfig({
   blanket_mocha: {
     test: {
-      src: ['specs/test.html'],                
-      options : {    
+      src: ['specs/test.html'],
+      options : {
           threshold : 70
-      }                
+      }
     }
   }
 })

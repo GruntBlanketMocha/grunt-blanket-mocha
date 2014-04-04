@@ -47,8 +47,9 @@ module.exports = function(grunt) {
 
         var pass = (percent >= threshold);
 
-        //If not passed, check if file is marked for manual exclusion. Else, fail it.
-        var result = pass ? "PASS" : (  excludedFiles.indexOf(name) === -1 /*File not found*/  ? "FAIL" : "SKIP");
+        // If not passed, check if file is marked for manual exclusion. Else, fail it.
+        var exclude = _(excludedFiles).some(function (o) {return o.test(name);});
+        var result = pass ? "PASS" : ( exclude ? "SKIP" : "FAIL");
 
         var percentDisplay = Math.floor(percent);
         if (percentDisplay < 10) {
@@ -105,8 +106,13 @@ module.exports = function(grunt) {
             var totalLines = thisTotal[1];
 
             var threshold = coverageThreshold;
-            if (customThreshold[filename]) {
-                threshold = customThreshold[filename];
+
+            // Check for a custom threshold
+            var custom = _.find(customThreshold, function (o) {
+                return o[0].test(filename);
+            });
+            if (custom !== undefined) {
+                threshold = custom[1];
             }
 
             printPassFailMessage(filename, coveredLines, totalLines, threshold);
@@ -232,18 +238,26 @@ module.exports = function(grunt) {
         var grep = grunt.option('grep');
         options.mocha = options.mocha || {};
 
-        //Get the array of excludedFiles
-        //Users should be able to define it in the command-line as an array or include it in the test file.
+        // Get the array of excludedFiles, normalize and prepare them
+        // Users should be able to define it in the command-line as an array or include it in the test file.
         excludedFiles =  grunt.option('excludedFiles') || options.excludedFiles || [];
+        excludedFiles = _(excludedFiles).map(function (o) {
+            return new RegExp(path.normalize(o) + '$');
+        }).value();
 
+        // Get the custom thresholds for files, normalize and prepare the file names
         customThreshold = grunt.option('customThreshold') || options.customThreshold || {};
+        customThreshold = _(customThreshold).pairs().map(function (o) {
+            return [new RegExp(path.normalize(o[0]) + '$'), o[1]];
+        }).value();
+
         customModuleThreshold = grunt.option('customModuleThreshold') || options.customModuleThreshold|| {};
 
         if (grep) {
             options.mocha.grep = grep;
         }
-        
-        
+
+
         // Output console messages if log == true
         if (options.log) {
             phantomjs.removeAllListeners(['console']);
