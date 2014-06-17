@@ -242,6 +242,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+## 0.4.1
+*Released 17 June 2014*
+
+* Better filename matching, and other misc fixes.
+
 ## 0.4.0
 *Released 2 February 2014*
 
