@@ -121,7 +121,9 @@ module.exports = function(grunt) {
             totals.coveredLines += coveredLines;
 
             if (modulePatternRegex) {
-                var moduleName = filename.match(modulePatternRegex)[1];
+                var match = filename.match(modulePatternRegex);
+				if (!match) return;
+                var moduleName = match[1];
                 if(!totals.moduleTotalStatements.hasOwnProperty(moduleName)) {
                     totals.moduleTotalStatements[moduleName] = 0;
                     totals.moduleTotalCoveredStatements[moduleName] = 0;
