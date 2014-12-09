@@ -8,6 +8,11 @@
     "email": "dcadwallader@gmail.com",
     "url": "http://geekdave.com"
   },
+  "contributors": {
+    "name": "Sean Coker",
+    "email": "hello@sean.is",
+    "url": "http://sean.is"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/ModelN/grunt-blanket-mocha.git"
