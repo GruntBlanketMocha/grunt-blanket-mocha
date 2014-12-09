@@ -1,7 +1,7 @@
 {
   "name": "grunt-blanket-mocha",
   "description": "Headless Blanket.js code coverage and Mocha testing via PhantomJS",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "homepage": "https://github.com/ModelN/grunt-blanket-mocha",
   "author": {
     "name": "Dave Cadwallader",
@@ -30,9 +30,9 @@
   },
   "dependencies": {
     "blanket": "~1.1.6",
-    "grunt-lib-phantomjs": "~0.4.0",
-    "mocha": "~1.14.0",
-    "lodash": "~2.3.0"
+    "grunt-lib-phantomjs": "~0.6.0",
+    "mocha": "~2.0.1",
+    "lodash": "~2.4.1"
   },
   "peerDependencies": {
     "grunt": "~0.4"
