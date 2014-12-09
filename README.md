@@ -42,8 +42,8 @@ grunt.loadNpmTasks('grunt-blanket-mocha');
 
 ## Dependencies
 
-* Blanket.js (tested with v1.1.5)
-* Mocha (tested with v1.14.0)
+* Blanket.js (tested with v1.1.6)
+* Mocha (tested with v2.0.1)
 
 ## The "blanket_mocha" task
 
