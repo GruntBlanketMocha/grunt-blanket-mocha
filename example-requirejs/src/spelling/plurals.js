@@ -1,3 +1,4 @@
+/*global define */
 define([
 
 ], function(){
@@ -14,7 +15,7 @@ define([
 
         return ret;
     };
-    
+
     var cat = function(howMany) {
         var ret;
         if (howMany < 0) {
@@ -23,18 +24,19 @@ define([
             ret = "1 cat";
         } else {
             ret = "" + howMany + " cats";
-        } 
-        
+        }
+
         return ret;
     };
 
     var fish = function(howMany) {
-        return "" + howMany + " fish";               
+        return "" + howMany + " fish";
     };
-    
+
     return {
+        dog: dog,
         cat: cat,
         fish: fish
-    }
-    
+    };
+
 });

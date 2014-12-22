@@ -7,16 +7,21 @@
     "name": "Dave Cadwallader",
     "email": "dcadwallader@gmail.com"
   },
+  "contributors": {
+    "name": "Sean Coker",
+    "email": "hello@sean.is",
+    "url": "http://sean.is"
+  },
   "main": "Gruntfile.js",
   "engines": {
     "node": ">= 0.8.0"
   },
   "devDependencies": {
-    "grunt-blanket-mocha": "~0.4.1",
+    "grunt-blanket-mocha": "0.4.2",
     "grunt": "0.4.1",
-    "mocha": "1.17.1",
+    "mocha": "2.0.1",
     "chai": "1.8.1",
-    "blanket": "1.1.5",
+    "blanket": "1.1.6",
     "requirejs": "2.1.10"
   }
 }
