@@ -1,5 +1,9 @@
 # grunt-blanket-mocha
 
+# Seeking Maintainers!
+
+This project is no longer actively being maintained.  If you are interested in taking over as a maintainer/owner, please [apply here](https://github.com/ModelN/grunt-blanket-mocha/issues/39)
+
 > Headless Blanket.js code coverage and Mocha testing via PhantomJS
 
 ## Wat?
