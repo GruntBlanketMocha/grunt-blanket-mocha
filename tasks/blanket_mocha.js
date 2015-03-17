@@ -295,7 +295,7 @@ module.exports = function(grunt) {
         var done = this.async();
 
         // Hijack console.log to capture reporter output
-        var dest = this.data.dest;
+        var dest = options.dest;
         var output = [];
         var consoleLog = console.log;
         // Latest mocha xunit reporter sends to process.stdout instead of console
