@@ -1,8 +1,10 @@
 # grunt-blanket-mocha
 
-# Seeking Maintainers!
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
-This project is no longer actively being maintained.  If you are interested in taking over as a maintainer/owner, please [apply here](https://github.com/ModelN/grunt-blanket-mocha/issues/39)
+# Unmaintained!
+
+This project is no longer maintained.  Feel free to fork and continue development!
 
 > Headless Blanket.js code coverage and Mocha testing via PhantomJS
 
