@@ -1,29 +1,29 @@
 {
   "name": "grunt-blanket-mocha",
   "description": "Headless Blanket.js code coverage and Mocha testing via PhantomJS",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "homepage": "https://github.com/ModelN/grunt-blanket-mocha",
   "author": {
     "name": "Dave Cadwallader",
     "email": "dcadwallader@gmail.com",
     "url": "http://geekdave.com"
   },
-  "contributors": {
+  "contributors": [{
     "name": "Sean Coker",
     "email": "hello@sean.is",
     "url": "http://sean.is"
-  },
+  }],
   "repository": {
     "type": "git",
-    "url": "git://github.com/ModelN/grunt-blanket-mocha.git"
+    "url": "git://github.com/GruntBlanketMocha/grunt-blanket-mocha.git"
   },
   "bugs": {
-    "url": "https://github.com/ModelN/grunt-blanket-mocha/issues"
+    "url": "https://github.com/GruntBlanketMocha/grunt-blanket-mocha/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/ModelN/grunt-blanket-mocha/blob/master/LICENSE-MIT"
+      "url": "https://github.com/GruntBlanketMocha/grunt-blanket-mocha/blob/master/LICENSE-MIT"
     }
   ],
   "main": "Gruntfile.js",
@@ -31,21 +31,22 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/grunt test"
+    "test": "grunt test"
   },
   "dependencies": {
+    "grunt": ">=0.4.0",
     "blanket": "~1.1.6",
-    "grunt-lib-phantomjs": "~0.6.0",
-    "mocha": "~2.0.1",
-    "lodash": "~2.4.1"
+    "grunt-lib-phantomjs": "^1.0.2",
+    "mocha": "^2.4.5",
+    "lodash": "^3.9.0"
   },
   "peerDependencies": {
-    "grunt": "~0.4"
+    "grunt": ">=0.4.0"
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-connect": "~0.5.0",
-    "grunt-contrib-jshint": "~0.7.1"
+    "chai": "^3.4.1",
+    "grunt-contrib-connect": "~1.0.2",
+    "grunt-contrib-jshint": "~1.0.0"
   },
   "keywords": [
     "gruntplugin",

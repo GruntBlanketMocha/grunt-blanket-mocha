@@ -26,7 +26,7 @@ This plugin, however:
 
 ## Parent Plugin
 
-This plugin is based on [kmiyashiro/grunt-mocha](https://github.com/kmiyashiro/grunt-mocha/tree/8e72249b1042a270641633a69725ccf63fa10259) v0.4.10 and supports all the
+This plugin is based on [kmiyashiro/grunt-mocha](https://github.com/kmiyashiro/grunt-mocha/tree/8e72249b1042a270641633a69725ccf63fa10259) v1.0.2 and supports most of the
 configurations of that plugin as of that version.  Please see that repo for more options on configuration.
 
 Changes from the upstream plugin will be merged periodically.
@@ -49,18 +49,12 @@ grunt.loadNpmTasks('grunt-blanket-mocha');
 ## Dependencies
 
 * Blanket.js (tested with v1.1.6)
-* Mocha (tested with v2.0.1)
+* Mocha (tested with v2.4.5)
 
 ## The "blanket_mocha" task
 
-### See Also
-
-This plugin is based off of grunt-contrib-mocha.  For general config options and examples, please see that repo.
-
 ## Setup
-
 ### Demo
-
 See the `example` and `example-requires` directories for a fully-working examples of the setup, including some of the scaffolding required to get all the pieces to fit together.  The `README` in that directory will walk you through it.
 
 ### Gruntfile
@@ -84,7 +78,6 @@ Use the `all` param to specify where your mocha browser spec HTML file lives.
 This works the same way as it does in the base `grunt-mocha` plugin.
 
 NOTE: Be sure to include the blanketJS script tag in your test html file
-
 ### Blanket Adapter
 
 To allow Blanket to communicate with the parent Grunt process, add this snippet in your test HTML, after all the

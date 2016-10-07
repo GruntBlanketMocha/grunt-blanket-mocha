@@ -1,5 +1,15 @@
 # History
 
+## 1.0.0
+* Bump mocha to 2.4.5
+* [BREAKING] Bump grunt-lib-phantomjs to master, uses PhantomJS 2.x
+* [BREAKING] `run` option is now true by default
+
+## 0.4.11
+* Bump mocha to 1.18 for promise support
+* README fixes
+* `options.growlOnSuccess` option added (@naganowl)
+
 ## 0.4.10
 * Actually error out if `logErrors` is true and error
 
