@@ -1,12 +1,6 @@
 # grunt-blanket-mocha
 
-[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
-
-# Unmaintained!
-
-This project is no longer maintained.  Feel free to fork and continue development!
-
-> Headless Blanket.js code coverage and Mocha testing via PhantomJS
+Headless Blanket.js code coverage and Mocha testing via PhantomJS
 
 ## Wat?
 
